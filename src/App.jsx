@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 import UsersService from './api/usersService'
-import Search from './components/UI/search/Search'
+import Search from './components/userSearch/UserSearch'
 import { useLoading } from './hooks/useLoading'
 import UserInfoModal from './components/userInfoModal/UserInfoModal'
 import Alert from './components/UI/alert/Alert'
@@ -18,27 +18,35 @@ function App() {
   const [page, setPage] = useState(0)
   const [total, setTotal] = useState(0)
   const [sort, setSort] = useState({sort: 'name', order: 'default'})
+  const [query, setQuery] = useState('')
 
-  const [isUsersLoading, loadUsers] = useLoading(async () => {
-    const data = await UsersService.getAll(30, 30 * page)
+  const [isLoading, loadUsers] = useLoading(async (page) => {
+    let data;
+    if (query) {
+      data = await UsersService.search(query, 30, 30 * page)
+    } else {
+      data = await UsersService.getAll(30, 30 * page)
+    }
     setUsers(data.users)
     setTotal(data.total)
   }, error => setError(error.message))
-
-  const [isUsersSearching, searchUsers] = useLoading(async (query) => {
-    const data = await UsersService.search(query, 30, 30 * page)
-    setUsers(data.users)
-    setTotal(data.total)
-  }, error => setError(error.message))
-
-  const isLoading = isUsersLoading || isUsersSearching
 
   useEffect(() => {
-    loadUsers()
-  }, [page])
+    loadUsers(0)
+  }, [])
   
+  const onSearch = () => {
+    setPage(0)
+    loadUsers(0)
+  }
+
   const onRowClick = (id) => {
     setModalUser(users.find(x => x.id === id))
+  }
+
+  const changePage = (page) => {
+    setPage(page)
+    loadUsers(page)
   }
 
   const usersData = useMemo(() => users.map(user => ({...user, name: `${user.lastName} ${user.firstName} ${user.maidenName}`, address: user.address.address})), [users, sort])
@@ -54,10 +62,10 @@ function App() {
           {error}
         </Alert>
       }
-      <Search className='search' onSearch={query => searchUsers(query)}/>
+      <Search className='search' onSearch={onSearch} query={query} setQuery={setQuery}/>
       <div style={{display: 'flex', justifyContent: 'space-between'}}>
         <UserSort sort={sort} setSort={setSort}/>
-        <Pagination total={total} limit={30} page={page} setPage={setPage}/>
+        <Pagination total={total} limit={30} page={page} setPage={changePage}/>
       </div>
       <UserTable users={sortedUsers} onRowClick={onRowClick} className='user-table'/>
       {isLoading && <Loader/>}

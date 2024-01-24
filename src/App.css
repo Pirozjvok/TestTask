@@ -1,6 +1,7 @@
 .app {
   max-width: 1200px;
   margin: 0px auto;
+  margin-bottom: 16px;
 }
 
 .alert {
