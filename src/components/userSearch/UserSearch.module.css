@@ -12,25 +12,5 @@
 }
 
 .btn {
-    padding: 0px 12px;
-    font-size: 18px;
-    background-color: #0081FE;
-    color: white;
-    border: none;
     margin-left: 8px;
-    transition: background-color .1s;
-    border-radius: 4px;
 }
-
-.btn:hover {
-    background-color: #0176eb;
-}   
-
-.btn:active {
-    background-color: #0063c7;
-}   
-
-.btn:focus {
-    outline-offset: 1px;
-    outline: 2px solid #0081FE;
-}   

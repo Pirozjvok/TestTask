@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from '../UI/modal/Modal';
+import Button from '../UI/button/Button';
 
 const UserInfoModal = ({user, onClose}) => {
   return ( 
@@ -14,6 +15,7 @@ const UserInfoModal = ({user, onClose}) => {
       <p>Вес: {user.weight}</p> 
       <p>Номер телефона: {user.phone}</p> 
       <p>Email: {user.email}</p> 
+      <Button onClick={onClose} style={{padding: '8px 12px', width: '100%', marginTop: '8px'}}>Закрыть</Button>
     </Modal>
   )
 }

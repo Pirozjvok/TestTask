@@ -17,27 +17,28 @@ function App() {
   const [error, setError] = useState()
   const [page, setPage] = useState(0)
   const [total, setTotal] = useState(0)
+  const [limit, setLimit] = useState(30)
   const [sort, setSort] = useState({sort: 'name', order: 'default'})
   const [query, setQuery] = useState('')
 
-  const [isLoading, loadUsers] = useLoading(async (page) => {
+  const [isLoading, loadUsers] = useLoading(async (limit, page) => {
     let data;
     if (query) {
-      data = await UsersService.search(query, 30, 30 * page)
+      data = await UsersService.search(query, limit, page)
     } else {
-      data = await UsersService.getAll(30, 30 * page)
+      data = await UsersService.getAll(limit, page)
     }
     setUsers(data.users)
     setTotal(data.total)
   }, error => setError(error.message))
 
   useEffect(() => {
-    loadUsers(0)
+    loadUsers(limit, 0)
   }, [])
   
   const onSearch = () => {
     setPage(0)
-    loadUsers(0)
+    loadUsers(limit, 0)
   }
 
   const onRowClick = (id) => {
@@ -46,7 +47,7 @@ function App() {
 
   const changePage = (page) => {
     setPage(page)
-    loadUsers(page)
+    loadUsers(limit, page)
   }
 
   const usersData = useMemo(() => users.map(user => ({...user, name: `${user.lastName} ${user.firstName} ${user.maidenName}`, address: user.address.address})), [users, sort])
@@ -65,7 +66,7 @@ function App() {
       <Search className='search' onSearch={onSearch} query={query} setQuery={setQuery}/>
       <div style={{display: 'flex', justifyContent: 'space-between'}}>
         <UserSort sort={sort} setSort={setSort}/>
-        <Pagination total={total} limit={30} page={page} setPage={changePage}/>
+        <Pagination total={total} limit={limit} page={page} setPage={changePage}/>
       </div>
       <UserTable users={sortedUsers} onRowClick={onRowClick} className='user-table'/>
       {isLoading && <Loader/>}

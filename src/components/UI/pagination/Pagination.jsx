@@ -17,7 +17,8 @@ const Pagination = ({ total, limit, page, setPage }) => {
           aria-selected={n === page} 
           tabIndex={0}
           key={n}
-          onClick={() => setPage(n)}>
+          onClick={() => setPage(n)}
+          onKeyDown={e => e.key === 'Enter' && setPage(n)}>
           {n + 1}
         </div>
       ))}

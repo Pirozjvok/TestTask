@@ -9,6 +9,10 @@
     font-size: 18px;
 }
 
+.page:hover {
+    background-color: #d3ebff;
+}
+
 .page[aria-selected="true"] {
     border: 2px solid #0081FE;
 }

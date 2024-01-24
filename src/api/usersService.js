@@ -2,15 +2,15 @@ const API_URL = "https://dummyjson.com"
 
 export default class UsersService 
 {
-    static async getAll(limit = 30, skip = 0) {
-        const response = await fetch(API_URL + `/users?limit=${limit}&skip=${skip}`)
+    static async getAll(limit = 30, page = 0) {
+        const response = await fetch(API_URL + `/users?limit=${limit}&skip=${limit * page}`)
         checkResponse(response)
         const data = await response.json()
         return data
     }
 
-    static async search(query, limit = 30, skip = 0) {
-        const response = await fetch(API_URL + `/users/search?q=${query}&limit=${limit}&skip=${skip}`)
+    static async search(query, limit = 30, page = 0) {
+        const response = await fetch(API_URL + `/users/search?q=${query}&limit=${limit}&skip=${limit * page}`)
         checkResponse(response)
         const data = await response.json()
         return data
