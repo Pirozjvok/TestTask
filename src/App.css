@@ -1,0 +1,17 @@
+.app {
+  max-width: 1200px;
+  margin: 0px auto;
+}
+
+.alert {
+  width: 100%;
+}
+
+.user-table {
+  width: 100%;
+}
+
+.search {
+  margin: 12px auto;
+  max-width: 1200px;
+}
