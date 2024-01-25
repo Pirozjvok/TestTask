@@ -1,0 +1,19 @@
+.loading {
+    display: flex;
+    justify-content: center;
+}
+
+.loading__icon {
+    margin-top: 16px;
+    transform: rotate(90deg);
+    animation: rotation 1s infinite linear;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

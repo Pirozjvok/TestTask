@@ -10,7 +10,7 @@ const UserInfoModal = ({user, onClose}) => {
       <p>Имя: {user.firstName}</p>
       <p>Отчество: {user.maidenName}</p>
       <p>Возраст: {user.age} лет</p>
-      <p>Адрес: {user.address.address}</p>
+      <p>Адрес: {user.address.city + ', ' + user.address.address}</p>
       <p>Рост: {user.height}</p>
       <p>Вес: {user.weight}</p> 
       <p>Номер телефона: {user.phone}</p> 

@@ -16,7 +16,7 @@ const UserTable = ({users, onRowClick, className}) => {
             `${user.age} лет`,
             user.gender,
             user.phone,
-            user.address        
+            user.shortAddress        
           ]}))}
         />
     </div>    

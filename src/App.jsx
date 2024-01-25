@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import UsersService from './api/usersService'
 import Search from './components/userSearch/UserSearch'
@@ -10,6 +10,7 @@ import UserTable from './components/userTable/UserTable'
 import Pagination from './components/UI/pagination/Pagination'
 import { useSortedUsers } from './hooks/useSortedUsers'
 import UserSort from './components/userSort/userSort'
+import { useUsers } from './hooks/useUsers'
 
 function App() {
   const [users, setUsers] = useState([])
@@ -22,6 +23,7 @@ function App() {
   const [query, setQuery] = useState('')
 
   const [isLoading, loadUsers] = useLoading(async (limit, page) => {
+    setError(null)
     let data;
     if (query) {
       data = await UsersService.search(query, limit, page)
@@ -29,28 +31,21 @@ function App() {
       data = await UsersService.getAll(limit, page)
     }
     setUsers(data.users)
-    setTotal(data.total)
+    setTotal(data.total)  
   }, error => setError(error.message))
 
-  useEffect(() => {
-    loadUsers(limit, 0)
+  useEffect(() => { 
+    loadUsers(limit, 0) 
   }, [])
   
-  const onSearch = () => {
-    setPage(0)
-    loadUsers(limit, 0)
-  }
-
-  const onRowClick = (id) => {
-    setModalUser(users.find(x => x.id === id))
-  }
-
-  const changePage = (page) => {
+  const changePage = page => {
     setPage(page)
     loadUsers(limit, page)
   }
 
-  const usersData = useMemo(() => users.map(user => ({...user, name: `${user.lastName} ${user.firstName} ${user.maidenName}`, address: user.address.address})), [users, sort])
+  const onRowClick = id => setModalUser(users.find(x => x.id === id))
+
+  const usersData = useUsers(users)
   const sortedUsers = useSortedUsers(usersData, sort)
 
   return (
@@ -63,13 +58,13 @@ function App() {
           {error}
         </Alert>
       }
-      <Search className='search' onSearch={onSearch} query={query} setQuery={setQuery}/>
-      <div style={{display: 'flex', justifyContent: 'space-between'}}>
+      <Search className='search' onSearch={() => changePage(0)} query={query} setQuery={setQuery}/>
+      <div className='sortpag'>
         <UserSort sort={sort} setSort={setSort}/>
         <Pagination total={total} limit={limit} page={page} setPage={changePage}/>
       </div>
       <UserTable users={sortedUsers} onRowClick={onRowClick} className='user-table'/>
-      {isLoading && <Loader/>}
+      {isLoading && <Loader text="Загрузка"/>}
     </div>
   )
 }

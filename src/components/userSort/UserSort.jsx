@@ -21,7 +21,7 @@ const UserSort = ({sort, setSort}) => {
           {name: 'По ФИО', value: 'name'},
           {name: 'По возрасту', value: 'age'},
           {name: 'По полу', value: 'gender'},
-          {name: 'По адресу', value: 'address'}
+          {name: 'По адресу', value: 'shortAddress'}
         ]}/>
       <Select 
         onChange={onOrderChange} 

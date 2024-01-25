@@ -1,11 +1,8 @@
-.table thead {
-  background-color: #0081FE;
-}
-
 .table th {
   padding: 8px 0px;
   font-size: 17px;
   color: white;
+  background-color: #0081FE;
 }
 
 .table th:first-child {
