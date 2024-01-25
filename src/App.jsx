@@ -9,8 +9,8 @@ import Loader from './components/UI/loader/Loader'
 import UserTable from './components/userTable/UserTable'
 import Pagination from './components/UI/pagination/Pagination'
 import { useSortedUsers } from './hooks/useSortedUsers'
-import UserSort from './components/userSort/userSort'
 import { usePagedUsers } from './hooks/usePagedUsers'
+import UserSort from './components/userSort/userSort'
 
 function App() {
   const [users, setUsers] = useState([])
