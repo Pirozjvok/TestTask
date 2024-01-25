@@ -5,7 +5,7 @@ export const useUsers = (users) => {
     () =>
       users.map((user) => ({
         ...user,
-        name: `${user.lastName} ${user.firstName} ${user.maidenName}`,
+        fullName: `${user.lastName} ${user.firstName} ${user.maidenName}`,
         shortAddress: user.address.city + ', ' + user.address.address,
       })),
     [users]

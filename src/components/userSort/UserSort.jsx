@@ -18,7 +18,7 @@ const UserSort = ({sort, setSort}) => {
         onChange={onSortChange} 
         value={sort.sort}
         options={[
-          {name: 'По ФИО', value: 'name'},
+          {name: 'По ФИО', value: 'fullName'},
           {name: 'По возрасту', value: 'age'},
           {name: 'По полу', value: 'gender'},
           {name: 'По адресу', value: 'shortAddress'}
