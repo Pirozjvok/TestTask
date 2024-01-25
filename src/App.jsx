@@ -10,43 +10,34 @@ import UserTable from './components/userTable/UserTable'
 import Pagination from './components/UI/pagination/Pagination'
 import { useSortedUsers } from './hooks/useSortedUsers'
 import UserSort from './components/userSort/userSort'
-import { useUsers } from './hooks/useUsers'
+import { usePagedUsers } from './hooks/usePagedUsers'
 
 function App() {
   const [users, setUsers] = useState([])
   const [modalUser, setModalUser] = useState()
   const [error, setError] = useState()
   const [page, setPage] = useState(0)
-  const [total, setTotal] = useState(0)
   const [limit, setLimit] = useState(30)
   const [sort, setSort] = useState({sort: 'name', order: 'default'})
-  const [query, setQuery] = useState('')
 
-  const [isLoading, loadUsers] = useLoading(async (limit, page) => {
+  const [isLoading, loadUsers] = useLoading(async () => {
     setError(null)
-    let data;
-    if (query) {
-      data = await UsersService.search(query, limit, page)
-    } else {
-      data = await UsersService.getAll(limit, page)
-    }
-    setUsers(data.users)
-    setTotal(data.total)  
+    setUsers(await UsersService.getAll())
+  }, error => setError(error.message))
+
+  const [isSearching, searchUsers] = useLoading(async (query) => {
+    setError(null)
+    setUsers(await UsersService.search(query))
   }, error => setError(error.message))
 
   useEffect(() => { 
-    loadUsers(limit, 0) 
+    loadUsers() 
   }, [])
-  
-  const changePage = page => {
-    setPage(page)
-    loadUsers(limit, page)
-  }
 
   const onRowClick = id => setModalUser(users.find(x => x.id === id))
 
-  const usersData = useUsers(users)
-  const sortedUsers = useSortedUsers(usersData, sort)
+  const sortedUsers = useSortedUsers(users, sort)
+  const pagedUsers = usePagedUsers(sortedUsers, page, limit)
 
   return (
     <div className='app'>
@@ -58,13 +49,14 @@ function App() {
           {error}
         </Alert>
       }
-      <Search className='search' onSearch={() => changePage(0)} query={query} setQuery={setQuery}/>
+      <Search className='search' onSearch={query => searchUsers(query)}/>
       <div className='sortpag'>
         <UserSort sort={sort} setSort={setSort}/>
-        <Pagination total={total} limit={limit} page={page} setPage={changePage}/>
+        <Pagination total={users.length} limit={limit} page={page} setPage={setPage}/>
       </div>
-      <UserTable users={sortedUsers} onRowClick={onRowClick} className='user-table'/>
+      <UserTable users={pagedUsers} onRowClick={onRowClick} className='user-table'/>
       {isLoading && <Loader text="Загрузка"/>}
+      {isSearching && <Loader text="Поиск"/>}
     </div>
   )
 }

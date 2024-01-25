@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import cl from './UserSearch.module.css'
 import Button from '../UI/button/Button';
 
-const Search = ({ className, query, setQuery, onSearch }) => {
+const Search = ({ className, onSearch }) => {
+  const [query, setQuery] = useState('')
+  
   const onClick = (e) => {
     e.preventDefault()
-    onSearch()
+    onSearch(query)
   }
 
-  const onChange = (e) => setQuery(e.target.value)
+  const onChange = e => setQuery(e.target.value)
   
   let formClass = cl.form
 
